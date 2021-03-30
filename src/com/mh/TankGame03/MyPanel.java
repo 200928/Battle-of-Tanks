@@ -40,29 +40,31 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
     public void paint(Graphics g) {
         super.paint(g);
         g.fillRect(0, 0, 1000, 750);
-//=================================自己坦克====================================
-        // 初始化
+//=================================画自己坦克====================================
+        // 画自己坦克
         drawTank(mytank.getX(), mytank.getY(), g, mytank.getDirect(), 0);
-        // 炮弹
+        // 子弹
         if (mytank.shot != null && mytank.shot.isLive) {
             mytank.shot.speed = 5;
             g.draw3DRect(mytank.shot.x, mytank.shot.y, 2,2, false);
         }
 
-//=================================敌人坦克====================================
-        // 初始化敌人坦克
+//=================================画敌人坦克====================================
+        // 画敌人坦克
         for (int i = 0; i < enemyTanks.size(); i++) {
             EnemyTank tmp = enemyTanks.get(i);
-            drawTank(tmp.getX(), tmp.getY(), g, tmp.getDirect(), 1);
-            // 画出所有子弹
-            for (int j = 0; j < tmp.shots.size(); j++) {
-                // 取出子弹
-                Shot shot = tmp.shots.get(j);
-                // 绘制子弹
-                if (shot.isLive) {  // 表示子弹没有越界
-                    g.draw3DRect(shot.x, shot.y, 2,2, false);
-                }  else {
-                    tmp.shots.remove(shot);
+            if (tmp.isLive) {
+                drawTank(tmp.getX(), tmp.getY(), g, tmp.getDirect(), 1);
+                // 画出所有子弹
+                for (int j = 0; j < tmp.shots.size(); j++) {
+                    // 取出子弹
+                    Shot shot = tmp.shots.get(j);
+                    // 绘制子弹
+                    if (shot.isLive) {  // 表示子弹没有越界
+                        g.draw3DRect(shot.x, shot.y, 2, 2, false);
+                    } else {
+                        tmp.shots.remove(shot);
+                    }
                 }
             }
         }
@@ -78,7 +80,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
      * @param type 坦克类型
      */
     public void drawTank(int x, int y, Graphics g, int direct, int type) {
-        // 判断坦克类型
+        // 判断坦克类型，设置画笔颜色
         switch (type) {
             case 0: // 我们的坦克
                 g.setColor(Color.yellow);
@@ -98,7 +100,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                 g.drawLine(x + 20, y + 30, x + 20, y);
                 break;
             case 1: // 向右
-                x -= 15;
+                x -= 10;
                 y += 10;
                 g.fill3DRect(x, y, 60, 10, false);  // 上边轮子
                 g.fill3DRect(x + 10, y + 10, 40, 20, false);    // 身体
@@ -114,7 +116,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                 g.drawLine(x + 20, y + 30, x + 20, y + 60);
                 break;
             case 3: // 向左
-                x -= 15;
+                x -= 10;
                 y += 10;
                 g.fill3DRect(x, y, 60, 10, false);  // 上边轮子
                 g.fill3DRect(x + 10, y + 10, 40, 20, false);    // 身体
@@ -125,8 +127,22 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
             default:
                 System.out.println("暂时不处理");
         }
-
     }
+
+
+    // 判断子弹是否击中敌人
+    public static void hitTank(Shot shot, EnemyTank enemyTank) {
+        switch (enemyTank.getDirect()) {
+            case 0: // 上
+            case 2: // 下
+                if (shot.x > enemyTank.getX() && shot.x < enemyTank.getX() + 40 &&
+                shot.y > enemyTank.getY() && shot.y < enemyTank.getY() + 60) {
+                    shot.isLive = false;
+                    enemyTank.isLive = false;
+                }
+        }
+    }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -168,6 +184,15 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            // 判断子弹是否打到敌人
+            if (mytank.shot != null && mytank.shot.isLive) {
+                for (int i = 0; i < enemyTanks.size(); i++) {
+                    EnemyTank enemyTank = enemyTanks.get(i);
+                    hitTank(mytank.shot, enemyTank);
+                }
+            }
+
             this.repaint();
         }
     }

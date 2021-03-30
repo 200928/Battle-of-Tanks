@@ -53,7 +53,10 @@ public class Shot implements Runnable {
                     break;
             }
             System.out.println("X = " + x + ", Y = " + y);  // 测试
-            if (!(x >= 0 && x <= 1000 && y >= 0 && y <= 750)) {
+
+            // 撞到墙了要销毁该子弹
+            // 或者是当射到敌人的时候也要销毁s
+            if (!(x >= 0 && x <= 1000 && y >= 0 && y <= 750 && isLive)) {
                 isLive = false;
                 break;
             }
