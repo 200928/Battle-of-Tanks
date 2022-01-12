@@ -10,8 +10,8 @@ package com.mh.TankGame_0_1;
 public class Tank {
     private int x;
     private int y;
-    private int direct = 0; // 坦克的方向，0上 1右 2下 3左
-    private int speed = 2;  // 坦克速度，默认 2
+    private int direct = 0;     // 坦克的方向，0上 1右 2下 3左
+    private int speed = 2;      // 坦克速度，默认 2
 
     public void moveUP() {
         y -= speed;

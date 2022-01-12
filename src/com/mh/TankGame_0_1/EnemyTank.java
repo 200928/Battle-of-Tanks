@@ -37,9 +37,10 @@ public class EnemyTank extends Tank implements Runnable {
     @Override
     public void run() {
         while (true) {
-            // 判断坦克的子弹还有没有
-            if (isLive && shots.size() < 100) {  // 没有则创建
+            // 判断坦克的子弹还有没有,如果小于 5 颗则继续创建并发射
+            if (isLive && shots.size() < 5) {  // 没有则创建
                 Shot shot = null;
+                //  根据坦克方向创建
                 switch (getDirect()) {
                     case 0:
                         shot = new Shot(getX() + 20, getY(), getDirect());
@@ -80,7 +81,7 @@ public class EnemyTank extends Tank implements Runnable {
             // 根据坦克的方向移动
             switch (getDirect()) {
                 case 0:
-                    // 随机走 [2, 6]
+                    // 随机走 [5, 9]
                     int move = new Random().nextInt(5) + 5;
                     for (int i = 0; i < move; i++) {
                         if (getY() > 0) {
@@ -94,7 +95,7 @@ public class EnemyTank extends Tank implements Runnable {
                     }
                     break;
                 case 1:
-                    // 随机走 [2, 6]
+                    // 随机走 [5, 9]
                     move = new Random().nextInt(5) + 5;
                     for (int i = 0; i < move; i++) {
                         if (getX() + 60 < 1000) {
@@ -108,7 +109,7 @@ public class EnemyTank extends Tank implements Runnable {
                     }
                     break;
                 case 2:
-                    // 随机走 [2, 6]
+                    // 随机走 [5, 9]
                     move = new Random().nextInt(5) + 5;
                     for (int i = 0; i < move; i++) {
                         if (getY() + 60 < 750) {
@@ -122,7 +123,7 @@ public class EnemyTank extends Tank implements Runnable {
                     }
                     break;
                 case 3:
-                    // 随机走 [2, 6]
+                    // 随机走 [5, 9]
                     move = new Random().nextInt(5) + 5;
                     for (int i = 0; i < move; i++) {
                         if (getX() > 0) {

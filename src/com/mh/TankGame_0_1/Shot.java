@@ -7,11 +7,11 @@ package com.mh.TankGame_0_1;
  * @ Version: 1.0
  */
 public class Shot implements Runnable {
-    private int x;  // 子弹的横坐标
-    private int y;  // 子弹的纵坐标
-    private int direct; // 子弹的运行方向
-    private int speed = 2;  // 子弹的速度默认为 2
-    private boolean isLive = true;  // 子弹的状态(死活)
+    private int x;                      // 子弹的横坐标
+    private int y;                      // 子弹的纵坐标
+    private int direct;                 // 子弹的运行方向
+    private int speed = 2;              // 子弹的速度默认为 2
+    private boolean isLive = true;      // 子弹的状态(死活)
 
     public Shot(int x, int y, int direct) {
         this.x = x;
@@ -65,6 +65,7 @@ public class Shot implements Runnable {
 
     @Override
     public void run() {
+        // 如果子弹还未死亡就继续改变子弹坐标实现动态移动
         while (isLive) {
             try {
                 Thread.sleep(50);
@@ -86,6 +87,7 @@ public class Shot implements Runnable {
                     x -= speed;
             }
 //            System.out.println("x=" + x + ",y=" + y);
+            // 如果子弹越界或者被我方坦克打中则设置子弹为死亡状态
             if (!(x >= 0 && x <= 1000 && y >= 0 && y <= 750 && isLive)) {
 //                System.out.println("子弹退出！！！");
                 isLive = false;

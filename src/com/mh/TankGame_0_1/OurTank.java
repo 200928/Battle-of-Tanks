@@ -29,7 +29,8 @@ public class OurTank extends Tank {
 
     // 发射子弹的函数
     public void shotEnemyTank() {
-        if (shots.size() > 1000) {
+        // 如果自己的子弹数量大于 5 颗就不创建了
+        if (shots.size() > 5) {
             return;
         }
         switch (getDirect()) {
